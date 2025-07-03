@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up - Home Made Pickles</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #546E7A, #CFD8DC);
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .signup-container {
+      max-width: 400px;
+      background-color: #ECEFF1;
+      padding: 36px 42px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      border-radius: 12px;
+      border: 1px solid #B0BEC5;
+    }
+
+    h2 {
+      text-align: center;
+      color: #37474F;
+      margin-bottom: 24px;
+      font-size: 1.8em;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      color: #37474F;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #90A4AE;
+      border-radius: 6px;
+      background-color: #FFFFFF;
+      font-size: 0.95rem;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      background-color: #546E7A;
+      color: #fff;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      margin-top: 28px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #37474F;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 18px;
+      text-decoration: none;
+      color: #546E7A;
+      font-size: 0.95rem;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+      color: #37474F;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <h2>Create Account</h2>
+    <form action="#" method="post">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+
+      <input type="submit" value="Sign Up">
+    </form>
+    <a class="back-link" href="{{ url_for('login') }}" >← Already have an account? Log in</a>
+  </div>
+</body>
+</html>

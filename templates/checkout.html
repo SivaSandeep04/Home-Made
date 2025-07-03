@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout</title>
+    <style>
+        :root {
+            --dark: #37474F;
+            --medium: #546E7A;
+            --light: #90A4AE;
+            --lighter: #B0BEC5;
+            --lightest: #CFD8DC;
+            --accent: #FF7043;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, var(--lightest), var(--lighter));
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 40px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--dark);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"],
+        select {
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            border: 1px solid var(--lighter);
+            border-radius: 8px;
+            font-size: 16px;
+            color: var(--dark);
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--medium);
+            outline: none;
+            box-shadow: 0 0 5px rgba(84, 110, 122, 0.5);
+        }
+
+        .btn {
+            background-color: var(--dark);
+            color: white;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--medium);
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 40px 20px;
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="{{ url_for('welcome') }}" style="position: absolute; top: 18px; left: 18px; background: #FF7043; color: #fff; padding: 10px 22px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 1rem;">Logout</a>
+    <div class="container">
+        <h2>Checkout</h2>
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+        <form method="post">
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="text" name="address" placeholder="Address" required>
+            <input type="text" name="phone" placeholder="Phone (10 digits)" pattern="[0-9]{10}" required>
+            <select name="payment" required>
+                <option value="">Select Payment Method</option>
+                <option value="COD">Cash on Delivery</option>
+                <option value="UPI">UPI</option>
+            </select>
+            
+            <button type="submit" class="btn">Place Order</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home - HomeMade Pickles</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --dark: #37474F;
+      --medium: #546E7A;
+      --light: #90A4AE;
+      --lighter: #B0BEC5;
+      --lightest: #CFD8DC;
+      --accent: #FF7043;
+    }
+
+  
+    body, html {
+      height: 100%;
+      min-height: 100%;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .container {
+      flex: 1 0 auto;
+    }
+    footer {
+      flex-shrink: 0;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #B0BEC5, #CFD8DC);
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      background-color: var(--dark);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 32px;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .navbar .brand {
+      font-size: 2rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar .brand i {
+      margin-right: 10px;
+      color: var(--accent);
+    }
+
+    
+    .navbar nav a {
+      margin: 0 30px;
+      text-decoration: none;
+      color: var(--lightest);
+      font-weight: 800;
+    }
+
+    .navbar nav a:hover {
+      color: var(--accent);
+    }
+
+    .navbar .auth {
+      display: flex;
+      gap: 12px;
+      margin-right: 80px;
+    }
+
+    .navbar .auth a {
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+   .navbar .auth .logout {
+  text-decoration: none;
+  padding: 15px 30px;
+  border: 2px solid var(--accent);
+  border-radius: 20px;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.navbar .auth .logout:hover {
+  background-color: var(--accent);
+  color: white;
+}
+
+
+    
+    /* Content */
+    .container {
+      padding: 100px 5% 40px;
+    }
+
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      width: 300px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+
+    .card-text {
+      font-size: 0.95rem;
+      color: var(--medium);
+      margin-bottom: 20px;
+    }
+
+    .card .explore {
+      padding: 10px 24px;
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-block;
+    }
+
+    .card .explore:hover {
+      background-color: #ff5722;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      background-color: var(--dark);
+      color: white;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="brand"> <i class="fas fa-pepper-hot"></i>HomeMade Pickles</div>
+    <nav>
+      <a href="{{ url_for('home') }}"  style="color: #FF7043;">Home</a>
+      <a href="{{ url_for('veg') }}">Veg Pickles</a>
+      <a href="{{ url_for('nveg') }}">Non-Veg Pickles</a>
+      <a href="{{ url_for('snacks') }}">Snacks</a>
+      <a href="{{ url_for('cart') }}">My Cart</a>
+      <a href="{{ url_for('my_orders') }}">My Orders</a>
+      <a href="{{ url_for('contact') }}">Contact</a>
+    </nav>
+    <div class="auth">
+      <a href="{{ url_for('welcome') }}" class="logout">Logout</a>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section style="background: linear-gradient(to right, #ff7043, #CFD8DC); padding: 120px 0 60px 0; text-align: center; color: #37474F;">
+    <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 20px;">Welcome to HomeMade Pickles</h1>
+    <p style="font-size: 1.3rem; max-width: 700px; margin: 0 auto 30px auto;">Experience the authentic taste of tradition with our hand-crafted pickles and snacks, made with love and the finest ingredients. Perfect for every meal and every occasion!</p>
+    <a href="{{ url_for('veg') }}" style="background: #37474F; color: #fff; padding: 16px 40px; border-radius: 30px; font-size: 1.2rem; text-decoration: none; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">Shop Now</a>
+  </section>
+
+  <!-- About Section -->
+  <section style="background: #fff; padding: 60px 0; text-align: center;">
+    <h2 style="font-size: 2rem; color: #FF7043; margin-bottom: 18px;">Why Choose Us?</h2>
+    <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; max-width: 900px; margin: 0 auto;">
+      <div style="flex: 1; min-width: 220px;">
+        <i class="fas fa-leaf" style="font-size: 2.5rem; color: #37474F;"></i>
+        <h3 style="margin: 12px 0 8px 0; color: #37474F;">100% Natural</h3>
+        <p style="color: #546E7A;">No preservatives, no artificial colors. Just pure, home-style goodness.</p>
+      </div>
+      <div style="flex: 1; min-width: 220px;">
+        <i class="fas fa-hand-holding-heart" style="font-size: 2.5rem; color: #37474F;"></i>
+        <h3 style="margin: 12px 0 8px 0; color: #37474F;">Handmade with Love</h3>
+        <p style="color: #546E7A;">Every jar is crafted in small batches for authentic taste and quality.</p>
+      </div>
+      <div style="flex: 1; min-width: 220px;">
+        <i class="fas fa-truck" style="font-size: 2.5rem; color: #37474F;"></i>
+        <h3 style="margin: 12px 0 8px 0; color: #37474F;">Fast Delivery</h3>
+        <p style="color: #546E7A;">Freshly packed and delivered to your doorstep, anywhere in India.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Cards Section -->
+  <div class="container">
+    <div class="cards">
+      <!-- Card 1 -->
+      <div class="card">
+        <img src="static/vegpic.jpg" alt="Vegetarian Pickles">
+        <div class="card-body">
+          <h3 class="card-title">Vegetarian Pickles</h3>
+          <p class="card-text">Fresh vegetables transformed into tangy, spicy delights</p>
+          <a href="{{ url_for('veg') }}" class="explore">Explore</a>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card">
+        <img src='static/nvegpic.jpg' alt="Non-Veg Pickles">
+        <div class="card-body">
+          <h3 class="card-title">Non-Veg Pickles</h3>
+          <p class="card-text">Tender meat and seafood pickles with aromatic spices</p>
+          <a href="{{ url_for('nveg') }}" class="explore">Explore</a>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card">
+        <img src="static/snackspic.jpeg" alt="Snacks">
+        <div class="card-body">
+          <h3 class="card-title">Traditional Snacks</h3>
+          <p class="card-text">Crispy, crunchy snacks made with traditional methods</p>
+          <a href="{{ url_for('snacks') }}" class="explore">Explore</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Call to Action -->
+  <section style="background: #FF7043; color: #fff; text-align: center; padding: 50px 0;">
+    <h2 style="font-size: 2rem; margin-bottom: 18px;">Ready to Taste Tradition?</h2>
+    <p style="font-size: 1.1rem; margin-bottom: 30px;">Order now and bring home the flavors of authentic, homemade pickles and snacks.</p>
+    <a href="{{ url_for('veg') }}" style="background: #fff; color: #FF7043; padding: 14px 36px; border-radius: 30px; font-size: 1.1rem; text-decoration: none; font-weight: bold;">Order Now</a>
+  </section>
+
+  <footer>
+    &copy; 2025 HomeMade Pickles. All rights reserved.
+  </footer>
+
+</body>
+</html>

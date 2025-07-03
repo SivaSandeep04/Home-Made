@@ -1,0 +1,22 @@
+<div class="navbar">
+  <div class="brand"><i class="fas fa-pepper-hot"></i> HomeMade Pickles</div>
+  <div class="menu">
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('veg') }}">Veg Pickles</a>
+    <a href="{{ url_for('nveg') }}">Non-Veg Pickles</a>
+    <a href="{{ url_for('snacks') }}">Snacks</a>
+    <a href="{{ url_for('cart') }}">My Cart</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+  </div>
+  <div class="auth">
+    <a href="{{ url_for('welcome') }}" class="logout">Logout</a>
+  </div>
+</div>
+
+<!-- Extra Navbar for offers or quick links -->
+<div style="background: #FF7043; color: #fff; text-align: center; padding: 8px 0; font-weight: bold; font-size: 1.05rem; letter-spacing: 1px;">
+  Free shipping on orders above ₹499! | 100% Homemade | Call us: +91 98765 43210
+</div>
+
+<!-- Page Heading (set in each template with block) -->
+{% block page_heading %}{% endblock %} 

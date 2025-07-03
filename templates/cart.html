@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Cart | HomeMade Pickles</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --dark: #37474F;
+      --medium: #546E7A;
+      --light: #90A4AE;
+      --lighter: #B0BEC5;
+      --lightest: #CFD8DC;
+      --accent: #FF7043;
+      --danger: #e53935;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--lightest);
+      color: var(--dark);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .wrapper {
+      flex: 1;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      background-color: var(--dark);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 32px;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .navbar .brand {
+      font-size: 2rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar nav a {
+      margin: 0 30px;
+      text-decoration: none;
+      color: var(--lightest);
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+
+    .navbar nav a:hover {
+      color: var(--accent);
+    }
+
+    .navbar .auth {
+      display: flex;
+      gap: 12px;
+      margin-right: 80px;
+    }
+
+    .navbar .auth a {
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .navbar .auth .logout {
+      text-decoration: none;
+      padding: 15px 30px;
+      border: 2px solid var(--accent);
+      border-radius: 20px;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .navbar .auth .logout:hover {
+      background-color: var(--accent);
+      color: white;
+    }
+
+    .cart-container {
+      max-width: 1000px;
+      margin: 120px auto 50px;
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--lighter);
+      padding: 20px 0;
+    }
+
+    .cart-item img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-right: 20px;
+    }
+
+    .cart-details {
+      flex: 1;
+    }
+
+    .cart-details h4 {
+      margin: 0 0 8px;
+      font-size: 1.2rem;
+      color: var(--dark);
+    }
+
+    .cart-details p {
+      margin: 0;
+      color: var(--medium);
+    }
+
+    .cart-price {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: var(--dark);
+      margin-right: 20px;
+    }
+
+    .remove-btn form {
+      margin: 0;
+    }
+
+    .remove-btn button {
+      background-color: var(--danger);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .remove-btn button:hover {
+      background-color: #c62828;
+    }
+
+    .total {
+      text-align: right;
+      margin-top: 20px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--dark);
+    }
+
+    .checkout-btn {
+      margin-top: 30px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .checkout-btn .btn {
+      background-color: var(--accent);
+      color: white;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+    }
+
+    .checkout-btn .btn:hover {
+      background-color: #ff5722;
+    }
+
+    .checkout-btn .btn.disabled {
+      background-color: #ccc;
+      color: #666;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+
+    .flash-message {
+      text-align: center;
+      color: green;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    footer {
+      background-color: var(--dark);
+      color: white;
+      text-align: center;
+      padding: 18px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="brand">HomeMade Pickles</div>
+    <nav>
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('veg') }}">Veg Pickles</a>
+      <a href="{{ url_for('nveg') }}">Non-Veg Pickles</a>
+      <a href="{{ url_for('snacks') }}">Snacks</a>
+      <a href="{{ url_for('cart') }}" style="color: #FF7043;">My Cart</a>
+      <a href="{{ url_for('my_orders') }}">My Orders</a>
+      <a href="{{ url_for('contact') }}">Contact</a>
+    </nav>
+    <div class="auth">
+      <a href="{{ url_for('welcome') }}" class="logout">Logout</a>
+    </div>
+  </div>
+
+  <!-- Cart Content -->
+  <div class="cart-container">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-message">
+          {% for message in messages %}
+            {{ message }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% if cart_items and cart_items|length > 0 %}
+      {% set total = namespace(value=0) %}
+      {% for item in cart_items %}
+        {% set item_total = item['price'] * item['qty'] %}
+        {% set total.value = total.value + item_total %}
+        <div class="cart-item">
+          <img src="{{ item['image'] }}" alt="{{ item['name'] }}">
+          <div class="cart-details">
+            <h4>{{ item['name'] }}</h4>
+            <p>Quantity: {{ item['qty'] }}</p>
+          </div>
+          <div class="cart-price">₹{{ item_total }}</div>
+          <div class="remove-btn">
+            <form method="POST" action="{{ url_for('remove_from_cart') }}">
+              <input type="hidden" name="name" value="{{ item['name'] }}">
+              <button type="submit">Remove</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+      <div class="total">Total: ₹{{ total.value }}</div>
+    {% else %}
+      <div class="total">Total: ₹0</div>
+      <p style="text-align:center; color:#888;">Your cart is empty.</p>
+    {% endif %}
+
+    <div class="checkout-btn">
+      {% if cart_items and cart_items|length > 0 %}
+        <form action="{{ url_for('checkout') }}" method="get">
+          <button class="btn">Proceed to Checkout</button>
+        </form>
+      {% else %}
+        <button class="btn disabled" disabled>Proceed to Checkout</button>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<footer>&copy; 2025 HomeMade Pickles. All rights reserved.</footer>
+
+<script>
+// Save scroll position before leaving the page (cart)
+window.addEventListener('beforeunload', function() {
+  localStorage.setItem('scrollPos-cart', window.scrollY);
+});
+// Restore scroll position on load (cart)
+window.addEventListener('load', function() {
+  const scrollPos = localStorage.getItem('scrollPos-cart');
+  if (scrollPos) window.scrollTo(0, parseInt(scrollPos));
+});
+</script>
+
+</body>
+</html>

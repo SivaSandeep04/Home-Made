@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Orders | HomeMade Pickles</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --dark: #37474F;
+      --medium: #546E7A;
+      --light: #90A4AE;
+      --lighter: #B0BEC5;
+      --lightest: #CFD8DC;
+      --accent: #FF7043;
+      --white: #ffffff;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--lightest);
+      color: var(--dark);
+    }
+    .navbar {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      background-color: var(--dark);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 32px;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .navbar .brand {
+      font-size: 2rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+    .navbar nav a {
+      margin: 0 30px;
+      text-decoration: none;
+      color: var(--lightest);
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+    .navbar nav a:hover, .navbar nav a.active {
+      color: var(--accent);
+    }
+    .navbar .auth {
+      display: flex;
+      gap: 12px;
+      margin-right: 80px;
+    }
+    .navbar .auth a {
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+    .navbar .auth .logout {
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-weight: bold;
+    }
+    .navbar .auth .logout:hover {
+      background-color: var(--accent);
+      color: white;
+    }
+    .orders-container {
+      max-width: 900px;
+      margin: 140px auto 40px;
+      background-color: white;
+      padding: 40px 30px;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+    h2 {
+      color: var(--accent);
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .order-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .order-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--lightest);
+      border-radius: 10px;
+      margin-bottom: 18px;
+      padding: 18px 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: box-shadow 0.2s;
+    }
+    .order-item:hover {
+      box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+    }
+    .order-details {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .order-details img {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid var(--lighter);
+    }
+    .order-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .order-info span {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+    .order-info small {
+      color: var(--medium);
+      font-size: 0.95rem;
+    }
+    .order-status {
+      font-weight: bold;
+      color: #4BB543;
+      font-size: 1.1rem;
+    }
+    footer {
+      background-color: var(--dark);
+      color: white;
+      text-align: center;
+      padding: 18px;
+      font-size: 0.9rem;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="brand">HomeMade Pickles</div>
+    <nav>
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('veg') }}">Veg Pickles</a>
+      <a href="{{ url_for('nveg') }}">Non-Veg Pickles</a>
+      <a href="{{ url_for('snacks') }}">Snacks</a>
+      <a href="{{ url_for('cart') }}">My Cart</a>
+      <a href="{{ url_for('my_orders') }}" class="active" >My Orders</a>
+      <a href="{{ url_for('contact') }}">Contact</a>
+    </nav>
+    <div class="auth">
+      <a href="{{ url_for('welcome') }}" class="logout">Logout</a>
+    </div>
+  </div>
+
+  <div class="orders-container">
+    <h2><i class="fas fa-box"></i> My Orders</h2>
+    {% if orders and orders|length > 0 %}
+    <ul class="order-list">
+      {% for order in orders %}
+      <li class="order-item">
+        <div class="order-details">
+          <img src="{{ order.image }}" alt="{{ order.name }}">
+          <div class="order-info">
+            <span>{{ order.name }}</span>
+            <small>Quantity: {{ order.qty }}</small>
+            <small>Price: ₹{{ order.price }}</small>
+          </div>
+        </div>
+        <div class="order-status">Placed</div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <p style="text-align:center; color:var(--medium); font-size:1.1rem;">No orders yet.</p>
+    {% endif %}
+  </div>
+
+  <footer>&copy; 2025 HomeMade Pickles. All rights reserved.</footer>
+
+  <script>
+  // Save scroll position before leaving the page (my_orders)
+  window.addEventListener('beforeunload', function() {
+    localStorage.setItem('scrollPos-my_orders', window.scrollY);
+  });
+  // Restore scroll position on load (my_orders)
+  window.addEventListener('load', function() {
+    const scrollPos = localStorage.getItem('scrollPos-my_orders');
+    if (scrollPos) window.scrollTo(0, parseInt(scrollPos));
+  });
+  </script>
+</body>
+</html> 

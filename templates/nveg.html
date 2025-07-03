@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Veg Pickles | HomeMade Pickles</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --dark: #37474F;
+      --medium: #546E7A;
+      --light: #90A4AE;
+      --lighter: #B0BEC5;
+      --lightest: #CFD8DC;
+      --white: #ffffff;
+    }
+    :root {
+      --dark: #37474F;
+      --medium: #546E7A;
+      --light: #90A4AE;
+      --lighter: #B0BEC5;
+      --lightest: #CFD8DC;
+      --accent: #FF7043;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--lightest);
+      color: var(--dark);
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      background-color: var(--dark);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 32px;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .navbar .brand {
+      font-size: 2rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+
+   
+
+    
+    .navbar nav a {
+      margin: 0 30px;
+      text-decoration: none;
+      color: var(--lightest);
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+
+    .navbar nav a:hover {
+      color: var(--accent);
+    }
+
+    .navbar .auth {
+      display: flex;
+      gap: 12px;
+      margin-right: 80px;
+    }
+
+    .navbar .auth a {
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+   .navbar .auth .logout {
+  text-decoration: none;
+  padding: 15px 30px;
+  border: 2px solid var(--accent);
+  border-radius: 20px;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.navbar .auth .logout:hover {
+  background-color: var(--accent);
+  color: white;
+}
+
+    header {
+      background-color: var(--dark);
+      color: var(--white);
+      padding: 20px 0;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .product-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      padding: 50px 5%;
+      max-width: 1300px;
+      margin: auto;
+      margin-top: 150px; /* Adjusted for fixed navbar */
+      background: linear-gradient(to left,rgba(84, 110, 122, 0.74),rgba(144, 164, 174, 0.62));
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+    }
+
+    .product-card {
+      background-color: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .product-card h3 {
+      margin: 10px 0 5px;
+      color: var(--dark);
+      font-size: 1.2rem;
+    }
+
+    .product-card .desc {
+      font-size: 0.9rem;
+      color: var(--medium);
+      margin-bottom: 8px;
+    }
+
+    .stars {
+      color: #FFC107;
+      margin-bottom: 10px;
+    }
+
+    .product-card p {
+      font-weight: bold;
+      color: var(--medium);
+      margin: 10px 0;
+    }
+
+    .product-card form button {
+      background-color: var(--dark);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-weight: bold;
+    }
+
+    .product-card form button:hover {
+      background-color: var(--medium);
+    }
+
+    footer {
+      background-color: var(--dark);
+      color: white;
+      text-align: center;
+      padding: 18px;
+      margin-top: 40px;
+      font-size: 0.9rem;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="brand">  HomeMade Pickles</div>
+    <nav>
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('veg') }}"  >Veg Pickles</a>
+      <a href="{{ url_for('nveg') }}" style="color: #FF7043;">Non-Veg Pickles</a>
+      <a href="{{ url_for('snacks') }}">Snacks</a>
+      <a href="{{ url_for('cart') }}">My Cart</a>
+      <a href="{{ url_for('my_orders') }}">My Orders</a>
+      <a href="{{ url_for('contact') }}">Contact</a>
+    </nav>
+    <div class="auth">
+      <a href="{{ url_for('welcome') }}" class="logout">Logout</a>
+    </div>
+  </div>
+  
+
+  <main class="product-container">
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='Chicken_Pickle.jpg') }}" alt="Chicken Pickle">
+      <h3>Chicken Pickle</h3>
+      <div class="desc">Classic Andhra-style chicken pickle.</div>
+      <div class="stars">★★★★★</div>
+      <p>₹149</p>
+      <form method="POST" action="{{ url_for('add_to_cart') }}">
+        <input type="hidden" name="name" value="Chicken Pickle">
+        <input type="hidden" name="price" value="149">
+        <input type="hidden" name="image" value="{{ url_for('static', filename='Chicken_Pickle.jpg') }}">
+        <button type="submit">Add To Cart</button>
+      </form>
+    </div>
+
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='Mutton Pickle.webp') }}" alt="Mutton Pickle">
+      <h3>Mutton Pickle</h3>
+      <div class="desc">Zesty and tangy with a hint of spice.</div>
+      <div class="stars">★★★★☆</div>
+      <p>₹129</p>
+      <form method="POST" action="{{ url_for('add_to_cart') }}">
+        <input type="hidden" name="name" value="Mutton Pickle">
+        <input type="hidden" name="price" value="129">
+        <input type="hidden" name="image" value="{{ url_for('static', filename='Mutton Pickle.webp') }}">
+        <button type="submit">Add To Cart</button>
+      </form>
+    </div>
+<div class="product-card">
+      <img src="{{ url_for('static', filename='Prawns Pickle.jpeg') }}" alt="Prawns Pickle">
+      <h3>Prawns Pickle</h3>
+      <div class="desc">Spicy and tangy prawns pickle.</div>
+      <div class="stars">★★★★★</div>
+      <p>₹149</p>
+      <form method="POST" action="{{ url_for('add_to_cart') }}">
+        <input type="hidden" name="name" value="Prawns Pickle">
+        <input type="hidden" name="price" value="149">
+        <input type="hidden" name="image" value="{{ url_for('static', filename='Prawns Pickle.jpeg') }}">
+        <button type="submit">Add To Cart</button>
+      </form>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='Fish_Pickle.jpeg') }}" alt="Fish Pickle">
+      <h3>Fish Pickle</h3>
+      <div class="desc">Aromatic fish with a spicy twist.</div>
+      <div class="stars">★★★★☆</div>
+      <p>₹159</p>
+      <form method="POST" action="{{ url_for('add_to_cart') }}">
+        <input type="hidden" name="name" value="Fish Pickle">
+        <input type="hidden" name="price" value="159">
+        <input type="hidden" name="image" value="{{ url_for('static', filename='Fish_Pickle.jpeg') }}">
+        <button type="submit">Add To Cart</button>
+      </form>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='egg.jpg') }}" alt="Egg Pickle">
+      <h3>Egg Pickle</h3>
+      <div class="desc">Spicy and tangy egg pickle.</div>
+      <div class="stars">★★★★☆</div>
+      <p>₹119</p>
+      <form method="POST" action="{{ url_for('add_to_cart') }}">
+        <input type="hidden" name="name" value="Egg Pickle">
+        <input type="hidden" name="price" value="119">
+        <input type="hidden" name="image" value="{{ url_for('static', filename='egg.jpg') }}">
+        <button type="submit">Add To Cart</button>
+      </form>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='keema.webp') }}" alt="Keema Pickle">
+      <h3>Keema Pickle</h3>
+      <div class="desc">Spicy minced meat pickle.</div>
+      <div class="stars">★★★★★</div>
+      <p>₹139</p>
+      <form method="POST" action="{{ url_for('add_to_cart') }}">
+        <input type="hidden" name="name" value="Keema Pickle">
+        <input type="hidden" name="price" value="139">
+        <input type="hidden" name="image" value="{{ url_for('static', filename='keema.webp') }}">
+        <button type="submit">Add To Cart</button>
+      </form>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='Chilli_Chiken.jpg') }}" alt="Chilli Chicken Pickle">
+      <h3>Chilli Chicken Pickle</h3>
+      <div class="desc">Spicy chicken with a tangy twist.</div>
+      <div class="stars">★★★★☆</div>
+      <p>₹129</p>
+      <form method="POST" action="{{ url_for('add_to_cart') }}">
+        <input type="hidden" name="name" value="Chilli Chicken Pickle">
+        <input type="hidden" name="price" value="129">
+        <input type="hidden" name="image" value="{{ url_for('static', filename='Chilli_Chiken.jpg') }}">
+        <button type="submit">Add To Cart</button>
+      </form>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='Crab_Pickle.jpg') }}" alt="Crab Pickle">
+      <h3>Crab Pickle</h3>
+      <div class="desc">Fresh crab with a spicy blend.</div>
+      <div class="stars">★★★★☆</div>
+      <p>₹119</p>
+      <form method="POST" action="{{ url_for('add_to_cart') }}">
+        <input type="hidden" name="name" value="Crab Pickle">
+        <input type="hidden" name="price" value="119">
+        <input type="hidden" name="image" value="{{ url_for('static', filename='Crab_Pickle.jpg') }}">
+        <button type="submit">Add To Cart</button>
+      </form>
+    </div>
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='dry fish.jpg') }}" alt="Dry Fish Pickle">
+      <h3>Dry Fish Pickle</h3>
+      <div class="desc">Spicy dry fish with a tangy twist.</div>
+      <div class="stars">★★★★★</div>
+      <p>₹149</p>
+      <form method="POST" action="{{ url_for('add_to_cart') }}">
+        <input type="hidden" name="name" value="Dry Fish Pickle">
+        <input type="hidden" name="price" value="149">
+        <input type="hidden" name="image" value="{{ url_for('static', filename='dry fish.jpg') }}">
+        <button type="submit">Add To Cart</button>
+      </form>
+    </div>
+    
+   
+    <div class="product-card">
+      <img src="{{ url_for('static', filename='squid.webp') }}" alt="Squid Pickle">
+      <h3>Squid Pickle</h3>
+      <div class="desc">Tender squid in a spicy marinade.</div>
+      <div class="stars">★★★★☆</div>
+      <p>₹139</p>
+      <form method="POST" action="{{ url_for('add_to_cart') }}">
+        <input type="hidden" name="name" value="Squid Pickle">
+        <input type="hidden" name="price" value="139">
+        <input type="hidden" name="image" value="{{ url_for('static', filename='squid.webp') }}">
+        <button type="submit">Add To Cart</button>
+      </form>
+    </div>
+
+    <!-- Add similar blocks for all 10 products -->
+
+  </main>
+
+  <footer>&copy; 2025 HomeMade Pickles. All rights reserved.</footer>
+
+  <script>
+  // Save scroll position before leaving the page (nveg)
+  window.addEventListener('beforeunload', function() {
+    localStorage.setItem('scrollPos-nveg', window.scrollY);
+  });
+  // Restore scroll position on load (nveg)
+  window.addEventListener('load', function() {
+    const scrollPos = localStorage.getItem('scrollPos-nveg');
+    if (scrollPos) window.scrollTo(0, parseInt(scrollPos));
+  });
+  </script>
+</body>
+</html>

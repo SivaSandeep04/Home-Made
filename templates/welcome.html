@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome - Home Made Pickles and Snacks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #546E7A, #CFD8DC);
+    }
+    .welcome-section {
+      background-image: url('https://images.unsplash.com/photo-1516569428740-7d4ee4c7b957?auto=format&fit=crop&w=1600&q=80');
+      background-size: cover;
+      background-position: center;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      flex-direction: column;
+      color: #fff;
+      padding: 0 20px;
+    }
+    .welcome-section h1 {
+      font-size: 4rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+    }
+    .welcome-section p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin-bottom: 40px;
+      line-height: 1.6;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+    .button-group {
+      display: flex;
+      gap: 20px;
+    }
+    .button-group a {
+      text-decoration: none;
+      padding: 14px 32px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 30px;
+      background-image: linear-gradient(to right,rgb(14, 14, 13), #546E7A);
+      color: #fff;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .button-group a:hover {
+      background: #333;
+      background-image: linear-gradient(to right, #546E7A,rgb(14, 14, 13));
+      color: #fff;
+    }
+
+    @media (max-width: 600px) {
+      .welcome-section h1 {
+        font-size: 2.5rem;
+      }
+      .welcome-section p {
+        font-size: 1rem;
+      }
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="welcome-section">
+    <h1>Welcome to Home Made Pickles & Snacks</h1>
+    <p>Enjoy the taste of tradition! Discover our wide range of homemade pickles and crunchy snacks made with love and local ingredients.</p>
+    <div class="button-group">
+      <a href="/login">Login</a>
+      <a href="/signup">Sign Up</a>
+    </div>
+  </div>
+</body>
+</html>

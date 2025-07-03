@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Home Made Pickles</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #546E7A, #CFD8DC);
+        }
+        .login-container {
+            background: linear-gradient(to bottom, #CFD8DC, #B0BEC5);
+            padding: 36px 44px;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            width: 330px;
+        }
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #37474F;
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 18px;
+            border: 1px solid #90A4AE;
+            border-radius: 8px;
+            background-color: #ECEFF1;
+            font-size: 1rem;
+        }
+        .login-container a {
+            display: block;
+            text-align: right;
+            font-size: 0.9rem;
+            color: #546E7A;
+            text-decoration: none;
+            margin-bottom: 16px;
+        }
+        .login-container a:hover {
+            text-decoration: underline;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 12px 0;
+            background: #37474F;
+            color: #ECEFF1;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+        .login-container button:hover {
+            background: #546E7A;
+        }
+        .error-message {
+            text-align: center;
+            color: crimson;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="login-container">
+        <h2>Login</h2>
+
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('login') }}">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <a href="{{ url_for('signup') }}" style="color:#2d383d">Not having an Account? Sing Up</a>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>

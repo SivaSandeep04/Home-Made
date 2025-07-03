@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order Placed | HomeMade Pickles</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --dark: #37474F;
+      --medium: #546E7A;
+      --light: #90A4AE;
+      --lighter: #B0BEC5;
+      --lightest: #CFD8DC;
+      --accent: #FF7043;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--lightest);
+      color: var(--dark);
+    }
+
+    .content {
+      flex: 1;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      background-color: var(--dark);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 32px;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .navbar .brand {
+      font-size: 2rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar nav a {
+      margin: 0 30px;
+      text-decoration: none;
+      color: var(--lightest);
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+
+    .navbar nav a:hover {
+      color: var(--accent);
+    }
+
+    .navbar .auth {
+      display: flex;
+      gap: 12px;
+      margin-right: 80px;
+    }
+
+    .navbar .auth a {
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .navbar .auth .logout {
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .navbar .auth .logout:hover {
+      background-color: var(--accent);
+      color: white;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 140px auto 40px;
+      background-color: white;
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      color: #4BB543;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: var(--medium);
+    }
+
+    .home-btn {
+      margin-top: 30px;
+      display: inline-block;
+      background-color: var(--accent);
+      color: white;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .home-btn:hover {
+      background-color: #ff5722;
+    }
+
+    footer {
+      background-color: var(--dark);
+      color: white;
+      text-align: center;
+      padding: 18px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Main Page Content -->
+  <div class="content">
+    <!-- Navbar -->
+    <div class="navbar">
+      <div class="brand">HomeMade Pickles</div>
+      <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('veg') }}">Veg Pickles</a>
+        <a href="{{ url_for('nveg') }}">Non-Veg Pickles</a>
+        <a href="{{ url_for('snacks') }}">Snacks</a>
+        <a href="{{ url_for('cart') }}">My Cart</a>
+        <a href="{{ url_for('my_orders') }}">My Orders</a>
+        <a href="{{ url_for('contact') }}">Contact</a>
+      </nav>
+      <div class="auth">
+        <a href="{{ url_for('welcome') }}" class="logout">Logout</a>
+      </div>
+    </div>
+
+    <!-- Success Content -->
+    <div class="container">
+      <h2><i class="fas fa-check-circle"></i> Order Placed Successfully!</h2>
+      <p>Thank you for shopping with HomeMade Pickles. Your order has been placed and will be delivered soon!</p>
+      <a href="{{ url_for('home') }}" class="home-btn">Back to Home</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>&copy; 2025 HomeMade Pickles. All rights reserved.</footer>
+</body>
+</html>
