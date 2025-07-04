@@ -1,116 +1,47 @@
-import boto3
 from flask import Flask, render_template, redirect, url_for, request, session, flash
+import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
-from botocore.exceptions import ClientError
-from flask_mail import Mail, Message
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
 
-# Flask-Mail configuration
-app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
-app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 587))
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
-app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER', app.config['MAIL_USERNAME'])
-mail = Mail(app)
+# Database setup
+conn = sqlite3.connect('users.db', check_same_thread=False)
+c = conn.cursor()
+c.execute('''CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL
+)''')
+conn.commit()
 
-# AWS SNS configuration
-AWS_REGION = os.environ.get('AWS_REGION', 'us-east-1')
-sns_client = boto3.client('sns', region_name=AWS_REGION)
-SNS_TOPIC_ARN = os.environ.get('SNS_TOPIC_ARN')  # Set this in your environment
+# Orders database setup
+orders_conn = sqlite3.connect('orders.db', check_same_thread=False)
+orders_c = orders_conn.cursor()
+orders_c.execute('''CREATE TABLE IF NOT EXISTS orders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,
+    name TEXT NOT NULL,
+    price INTEGER NOT NULL,
+    image TEXT NOT NULL,
+    qty INTEGER NOT NULL
+)''')
+orders_conn.commit()
 
-def send_sns_notification(message, subject=None):
-    if not SNS_TOPIC_ARN:
-        return False
-    try:
-        sns_client.publish(
-            TopicArn=SNS_TOPIC_ARN,
-            Message=message,
-            Subject=subject or 'Notification'
-        )
-        return True
-    except Exception as e:
-        print(f"SNS Error: {e}")
-        return False
-
-def send_email(to, subject, body):
-    try:
-        msg = Message(subject, recipients=[to], body=body)
-        mail.send(msg)
-        return True
-    except Exception as e:
-        print(f"Email Error: {e}")
-        return False
-
-# DynamoDB setup
-dynamodb = boto3.resource('dynamodb', region_name=AWS_REGION)
-users_table = dynamodb.Table('users')
-carts_table = dynamodb.Table('carts')
-orders_table = dynamodb.Table('orders')
-
-def get_user(username):
-    try:
-        response = users_table.get_item(Key={'username': username})
-        return response.get('Item')
-    except ClientError:
-        return None
-
-def add_user(username, email, password_hash):
-    try:
-        users_table.put_item(Item={
-            'username': username,
-            'email': email,
-            'password': password_hash
-        }, ConditionExpression='attribute_not_exists(username)')
-        return True
-    except ClientError as e:
-        if e.response['Error']['Code'] == 'ConditionalCheckFailedException':
-            return False
-        raise
-
-def get_cart(username):
-    response = carts_table.query(
-        KeyConditionExpression=boto3.dynamodb.conditions.Key('username').eq(username)
-    )
-    return response.get('Items', [])
-
-def add_to_cart(username, name, price, image):
-    # Try to update qty, if not exists, put new
-    try:
-        carts_table.update_item(
-            Key={'username': username, 'name': name},
-            UpdateExpression='SET qty = if_not_exists(qty, :zero) + :inc, price=:price, image=:image',
-            ExpressionAttributeValues={':inc': 1, ':zero': 0, ':price': price, ':image': image},
-            ReturnValues='UPDATED_NEW'
-        )
-    except ClientError as e:
-        raise
-
-def remove_from_cart(username, name):
-    carts_table.delete_item(Key={'username': username, 'name': name})
-
-def clear_cart(username):
-    items = get_cart(username)
-    for item in items:
-        carts_table.delete_item(Key={'username': username, 'name': item['name']})
-
-def get_orders(username):
-    response = orders_table.query(
-        KeyConditionExpression=boto3.dynamodb.conditions.Key('username').eq(username)
-    )
-    return response.get('Items', [])
-
-def add_order(username, name, price, image, qty):
-    orders_table.put_item(Item={
-        'username': username,
-        'name': name,
-        'price': price,
-        'image': image,
-        'qty': qty
-    })
+# Carts database setup
+carts_conn = sqlite3.connect('carts.db', check_same_thread=False)
+carts_c = carts_conn.cursor()
+carts_c.execute('''CREATE TABLE IF NOT EXISTS carts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,
+    name TEXT NOT NULL,
+    price INTEGER NOT NULL,
+    image TEXT NOT NULL,
+    qty INTEGER NOT NULL
+)''')
+carts_conn.commit()
 
 @app.route('/')
 def welcome():
@@ -121,8 +52,9 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = get_user(username)
-        if user and check_password_hash(user['password'], password):
+        c.execute('SELECT password FROM users WHERE username = ?', (username,))
+        user = c.fetchone()
+        if user and check_password_hash(user[0], password):
             session['user'] = username
             return redirect(url_for('home'))
         else:
@@ -135,16 +67,14 @@ def signup():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
-        if get_user(username) or any(u.get('email') == email for u in users_table.scan().get('Items', [])):
-            error = 'Username or email already exists.'
-            return render_template('signup.html', error=error)
         hashed_password = generate_password_hash(password)
-        if add_user(username, email, hashed_password):
+        try:
+            c.execute('INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+                      (username, email, hashed_password))
+            conn.commit()
             flash('Signup successful! Please log in.')
-            send_sns_notification(f'New user signed up: {username}', subject='New Signup')
-            send_email(email, 'Welcome to HomeMade!', f'Thank you for signing up, {username}!')
             return redirect(url_for('login'))
-        else:
+        except sqlite3.IntegrityError:
             error = 'Username or email already exists.'
             return render_template('signup.html', error=error)
     return render_template('signup.html')
@@ -164,7 +94,11 @@ def cart():
     if 'user' not in session:
         return redirect(url_for('login'))
     username = session['user']
-    cart_items = get_cart(username)
+    carts_c.execute('SELECT name, price, image, qty FROM carts WHERE username = ?', (username,))
+    cart_items = [
+        {'name': row[0], 'price': row[1], 'image': row[2], 'qty': row[3]}
+        for row in carts_c.fetchall()
+    ]
     return render_template('cart.html', cart_items=cart_items)
 
 @app.route('/add_to_cart', methods=['POST'])
@@ -172,11 +106,21 @@ def add_to_cart():
     if 'user' not in session:
         flash("You need to login first")
         return redirect(url_for('login'))
+
     username = session['user']
     name = request.form['name']
     price = int(request.form['price'])
     image = request.form['image']
-    add_to_cart(username, name, price, image)
+
+    # Check if item already in cart
+    carts_c.execute('SELECT qty FROM carts WHERE username = ? AND name = ?', (username, name))
+    row = carts_c.fetchone()
+    if row:
+        carts_c.execute('UPDATE carts SET qty = qty + 1 WHERE username = ? AND name = ?', (username, name))
+    else:
+        carts_c.execute('INSERT INTO carts (username, name, price, image, qty) VALUES (?, ?, ?, ?, ?)',
+                        (username, name, price, image, 1))
+    carts_conn.commit()
     flash(f"{name} added to cart!")
     return redirect(request.referrer or url_for('home'))
 
@@ -186,7 +130,8 @@ def remove_from_cart():
         return redirect(url_for('login'))
     username = session['user']
     item_name = request.form['name']
-    remove_from_cart(username, item_name)
+    carts_c.execute('DELETE FROM carts WHERE username = ? AND name = ?', (username, item_name))
+    carts_conn.commit()
     flash(f"{item_name} removed from cart.")
     return redirect(url_for('cart'))
 
@@ -195,22 +140,33 @@ def checkout():
     if 'user' not in session:
         flash("You must be logged in to checkout.")
         return redirect(url_for('login'))
+
     if request.method == 'POST':
         name = request.form['name']
         address = request.form['address']
         phone = request.form['phone']
         payment = request.form['payment']
+
         if not name or not address or not phone or not payment:
             error = "All fields are required."
             return render_template('checkout.html', error=error)
+
+        # Save order to orders.db
         username = session['user']
-        cart = get_cart(username)
+        carts_c.execute('SELECT name, price, image, qty FROM carts WHERE username = ?', (username,))
+        cart = [
+            {'name': row[0], 'price': row[1], 'image': row[2], 'qty': row[3]}
+            for row in carts_c.fetchall()
+        ]
         for item in cart:
-            add_order(username, item['name'], item['price'], item['image'], item['qty'])
-        clear_cart(username)
-        send_sns_notification(f'Order placed by {username}', subject='Order Success')
-        send_email(email, 'Order Confirmation', f'Your order has been placed, {username}!')
+            orders_c.execute('INSERT INTO orders (username, name, price, image, qty) VALUES (?, ?, ?, ?, ?)',
+                             (username, item['name'], item['price'], item['image'], item['qty']))
+        orders_conn.commit()
+        # Clear user's cart after order
+        carts_c.execute('DELETE FROM carts WHERE username = ?', (username,))
+        carts_conn.commit()
         return redirect(url_for('order_success'))
+
     return render_template('checkout.html')
 
 @app.route('/order_success')
@@ -238,14 +194,12 @@ def my_orders():
     if 'user' not in session:
         return redirect(url_for('login'))
     username = session['user']
-    user_orders = get_orders(username)
-    return render_template('my_orders.html', orders=user_orders)
-
-@app.route('/logout')
-def logout():
-    session.pop('user', None)
-    return redirect(url_for('login'))
+    orders_c.execute('SELECT name, price, image, qty FROM orders WHERE username = ?', (username,))
+    orders = [
+        {'name': row[0], 'price': row[1], 'image': row[2], 'qty': row[3]}
+        for row in orders_c.fetchall()
+    ]
+    return render_template('my_orders.html', orders=orders)
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    app.run(debug=True , host='0.0.0.0' , port='5000')
+    app.run(host='0.0.0.0', port=5000, debug=True)
